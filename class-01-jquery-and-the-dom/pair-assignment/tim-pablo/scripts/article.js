@@ -47,6 +47,7 @@ rawData.sort(function(a,b) {
 
 rawData.forEach(function(ele) {
   articles.push(new Article(ele));
+  console.log(ele);
 });
 
 articles.forEach(function(a){
