@@ -51,7 +51,7 @@ articleView.handleCategoryFilter = function() {
     if ($(this).val()) {
       $('article').hide();
       $('article[data-category = "' + $(this).val() + '"]').show();
-  // TODO: Just like we do for #author-filter above, we should handle change events on the #category-filter element.
+  // TODO-done: Just like we do for #author-filter above, we should handle change events on the #category-filter element.
   //       When an option with a value is selected, hide all the articles, then reveal the matches.
   //       When the blank (default) option is selected, show all the articles, except for the template.
   //       Be sure to reset the #author-filter while you are at it!
@@ -60,21 +60,28 @@ articleView.handleCategoryFilter = function() {
       $('article.template').hide();
     }
     $('author-filter').val('');
-  }
+  });
 };
 
 articleView.handleMainNav = function() {
-  // TODO: Add an event handler to .main-nav element that will power the Tabs feature.
+  // TODO-done: Add an event handler to .main-nav element that will power the Tabs feature.
   //       Clicking any .tab element should hide all the .tab-content sections, and then reveal the
   //       single .tab-content section that is associated with the clicked .tab element.
   //       So: You need to dynamically build a selector string with the correct ID, based on the
   //       data available to you on the .tab element that was clicked.
-  $('.main-nav').on(/* CODE GOES HERE */);
+  $('.main-nav .tab:first').on('click', function() {
+    $('.tab-content:first').show();
+    $('.tab-content:last').hide();
+  });
+  $('.main-nav .tab:last').on('click', function() {
+    $('.tab-content:last').show();
+    $('.tab-content:first').hide();
+  });
 
   $('.main-nav .tab:first').click(); // Let's now trigger a click on the first .tab element, to set up the page.
 };
 
-articleView.setTeasers = function() {
+articleView.setTeasers = function(e) {
   $('.article-body *:nth-of-type(n+2)').hide(); // Hide elements beyond the first 2 in any artcile body.
 
   // TODO: Add an event handler to reveal all the hidden elements,
@@ -82,10 +89,20 @@ articleView.setTeasers = function() {
   //       "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
   //       Ideally, we'd attach this as just 1 event handler on the #articles section, and let it
   //       process any .read-on clicks that happen within child nodes.
-
+  $('.read-on').each(function() {
+    $(this).on('click', function(e) {
+      e.preventDefault();
+      $(this).parent().find('.article-body *:nth-of-type(n+2)').show();
+      $(this).hide();
+    })
+  });
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
-$();
-articleView.populateFilters();
-articleView.handleAuthorFilter();
+$(function() {
+  articleView.populateFilters();
+  articleView.handleAuthorFilter();
+  articleView.handleCategoryFilter();
+  articleView.handleMainNav();
+  articleView.setTeasers();
+});
