@@ -7,17 +7,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js" charset="utf-8"></script>
 
   <script id="hello" type="text/template">
-    Hello {{0}}, my name is {{1}}, and I like {{2}}
+    Hello {{0}}, my name is {{1}}, and I like {{2}}. {{0}} eat {{2}} while {{1}} watch.
   </script>
 </head>
 <body>
   <div id="app"></div>
   <script>
     var compile = function(template, expressions) {
-      return appTemplate.replace(/{{(\d+)}}/g, swapper);
+      var index = 0;
+      return template.replace(/{{(\d+)}}/g, swapper);
       // where
-      function swapper(match, number) {
-        return expressions[number];
+      function swapper(match) {
+        return expressions[index++];
+        
       };
     };
     var appTemplate = $('#hello').html()
