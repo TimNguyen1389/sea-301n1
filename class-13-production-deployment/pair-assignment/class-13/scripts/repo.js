@@ -5,7 +5,7 @@
 
   // TODO: Refactor this ajax call into a get request to the proxy end point provided by server.js.
   repos.requestRepos = function(callback) {
-    $.get('https://api.github.com/users/TimNguyen1389/repos' +
+    $.get('/github/users/TimNguyen1389/repos' +
             '?per_page=100' +
             '&sort=updated')
       .done(function(data, message, xhr) {
