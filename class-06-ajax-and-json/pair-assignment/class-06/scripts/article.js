@@ -38,19 +38,30 @@ Article.loadAll = function(rawData) {
 
   rawData.forEach(function(ele) {
     Article.all.push(new Article(ele));
-  })
-}
+  });
+};
 
 // This function will retrieve the data from either a local or remote source,
 // and process it, then hand off control to the View.
+var eTagRemote = '';
+function preFetchAll() {
+  $.ajax({
+    type: 'HEAD',
+    url: 'data/ipsumArticles.json',
+    success: function(data, message, xhr) {
+      eTagRemote = xhr.getResponseHeader('ETag');
+    }
+  }).done(Article.fetchAll);
+}
+
 Article.fetchAll = function() {
-  if (localStorage.rawData) {
+  if (localStorage.rawData && (localStorage.getItem('eTagLocal') === eTagRemote)) {
     // When rawData is already in localStorage,
     // we can load it with the .loadAll function above,
     // and then render the index page (using the proper method on the articleView object).
-    Article.loadAll(//TODO: What do we pass in here to the .loadAll function?
-    );
-    articleView.someFunctionToCall; //TODO: What method do we call to render the index page?
+
+    Article.loadAll(JSON.parse(localStorage.rawData));
+    articleView.initIndexPage(); //TODO: What method do we call to render the index page?
   } else {
     // TODO: When we don't already have the rawData,
     // we need to retrieve the JSON file from the server with AJAX (which jQuery method is best for this?),
@@ -58,5 +69,20 @@ Article.fetchAll = function() {
     // then load all the data into Article.all with the .loadAll function above,
     // and then render the index page.
 
+    $.ajax({
+      beforeSend: function(xhr) {
+        if (xhr.overrideMimeType) {
+          xhr.overrideMimeType('application/json');
+        }
+      }
+    });
+
+    $.getJSON('data/ipsumArticles.json')
+    .done(function(data, message, xhr) {
+      localStorage.setItem('rawData', JSON.stringify(data));
+      localStorage.setItem('eTagLocal', xhr.getResponseHeader('ETag'));
+      Article.loadAll(data);
+      articleView.initIndexPage();
+    });
   }
-}
+};
