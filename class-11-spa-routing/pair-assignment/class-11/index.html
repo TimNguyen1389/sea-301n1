@@ -23,6 +23,9 @@
         <a href="#" class="read-on">Read on &rarr;</a>
       </article>
     </script>
+    <script id="author-template" type="text/x-handlebars-template">
+      <li><strong>{{name}}</strong>: {{numWords}} words written</li>
+    </script>
   </head>
   <body>
     <header class="site-header clearfix">
@@ -32,13 +35,19 @@
         </h1>
         <h2>The shocking power of static pages</h2>
       </section>
+
       <nav class="main-nav">
         <div class="icon-menu"></div>
-        <ul>
+        <ul id="index-page-nav">
           <li class="tab" data-content="articles"><a href="/" class="icon-home"> Home</a></li>
           <li class="tab" data-content="about"><a href="/about" class="icon-address-book"> About</a></li>
           <li><a href="http://twitter.com/brookr" target="_blank" class="icon-twitter3"> Twitter</a></li>
           <li><a href="http://github.com/brookr" target="_blank" class="icon-github"> GitHub</a></li>
+        </ul>
+        <ul id="admin-page-nav">
+          <li class="tab"><a href="/" class="icon-home"></a> Blog</li>
+          <li class="tab"><a href="stats.html"></a>Stats</li>
+          <li class="tab"><a href="new.html">New Article</a></li>
         </ul>
       </nav>
     </header>
@@ -73,6 +82,17 @@
         </section>
       </section>
     </main>
+  <main id="admin-page" class="clearfix">
+    <h1>Blog Stats</h1>
+    <section id="blog-stats">
+      <dt>Total articles:</dt> <dd class="articles"></dd>
+      <dt>Total words:</dt> <dd class="words"></dd>
+      <h2>Author Stats</h2>
+      <p><em>Details on who is writing, and how much writing they are doing...</em></p>
+      <ul class="author-stats">
+      </ul>
+    </section>
+  </main>
     <footer>
       &copy; 2015 Code Fellows | Static Blog | Happy Ipsum!
     </footer>
@@ -83,14 +103,14 @@
     <script src="/vendor/scripts/handlebars.js"></script>
     <script src="/vendor/scripts/marked.js"></script>
     <script src="/vendor/scripts/html5sql.js"></script>
+    <script src="/vendor/scripts/page.js"></script>
     <script src="/scripts/webdb.js"></script>
-
     <script src="/scripts/article.js"></script>
     <script src="/scripts/articleView.js"></script>
+    <script src="/scripts/articleController.js"></script>
+    <script src="/scripts/aboutController.js"></script>
+    <script src="/scripts/adminController.js"></script>
+    <script src="/scripts/routes.js"></script>
 
-    <script>
-      Article.createTable();
-      Article.fetchAll(articleView.initIndexPage);
-    </script>
   </body>
 </html>
